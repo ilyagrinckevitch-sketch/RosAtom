@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Росатом | Новые бизнесы и проекты — интерактивная презентация</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #e8f5e9 0%, #d9eff7 100%);
+            color: #1a2f2a;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* слайд-контейнер */
+        .slides-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide-wrapper {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            height: 100%;
+            width: 100%;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            overflow-y: auto;
+            height: 100%;
+            padding: 1.8rem 1.5rem;
+            scrollbar-width: thin;
+        }
+
+        .slide::-webkit-scrollbar {
+            width: 5px;
+        }
+        .slide::-webkit-scrollbar-track {
+            background: #cfe6d8;
+            border-radius: 10px;
+        }
+        .slide::-webkit-scrollbar-thumb {
+            background: #3bac6f;
+            border-radius: 10px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 32px -12px rgba(0, 40, 20, 0.2);
+            padding: 1.6rem 1.8rem 2rem;
+            border: 1px solid rgba(100, 180, 130, 0.4);
+        }
+
+        /* титул */
+        .title-slide .container {
+            background: rgba(255, 255, 255, 0.94);
+            text-align: center;
+        }
+        h1 {
+            font-size: clamp(2rem, 7vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #1b6e48, #248f5e, #1f7ea3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+        .executors {
+            background: #e0f2e6;
+            padding: 0.6rem 1.6rem;
+            border-radius: 60px;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 1.5rem;
+        }
+        .slide-title {
+            font-size: clamp(1.5rem, 4.5vw, 2.2rem);
+            font-weight: 700;
+            border-left: 5px solid #3bac6f;
+            padding-left: 1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        /* карточки */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+        }
+        .info-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            transition: 0.2s;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.03);
+            border: 1px solid #daf1e2;
+        }
+        .card-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 1rem;
+            margin-bottom: 0.7rem;
+            background: #eef4ea;
+        }
+        .stat-number {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1d8b5a;
+        }
+        .badge {
+            background: #e0f0e7;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .future-note {
+            background: #e2f0e8;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1.2rem;
+            margin-top: 1rem;
+            border-left: 4px solid #2c9c67;
+            font-size: 0.9rem;
+        }
+        /* навигация */
+        .nav-btn {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(50, 110, 80, 0.75);
+            backdrop-filter: blur(8px);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            cursor: pointer;
+            z-index: 100;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .nav-btn:hover {
+            background: #1f6e4a;
+            transform: translateY(-50%) scale(1.02);
+        }
+        .nav-left { left: 16px; }
+        .nav-right { right: 16px; }
+        .dots {
+            position: fixed;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 100;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #93bea8;
+            border-radius: 10px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .dot.active {
+            width: 24px;
+            background: #2c7a4d;
+        }
+        @media (max-width: 700px) {
+            .slide { padding: 1rem; }
+            .container { padding: 1rem; }
+            .nav-btn { width: 38px; height: 38px; font-size: 1.5rem; }
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 1.2rem;
+            opacity: 0.6;
+        }
+        .img-attribution {
+            font-size: 0.6rem;
+            color: #5f7c6b;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slides-container">
+    <div class="slide-wrapper" id="slideWrapper">
+        <!-- Слайд 1: Титул -->
+        <div class="slide title-slide">
+            <div class="container">
+                <h1>⚛️ Новые бизнесы Росатома</h1>
+                <div style="font-size: 1.1rem; margin: 0.5rem 0;">Водородный кластер • Технологии будущего • Диверсификация</div>
+                <div class="executors">🎓 Гринкевич И. | Барбачаков А. | Кузнецов Н.</div>
+                <div style="margin-top: 2rem;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/ROSATOM_logo.svg/2560px-ROSATOM_logo.svg.png" alt="Росатом лого" style="max-width: 160px; width: 60%; margin: 1rem auto; display: block; background: transparent;">
+                </div>
+                <div style="margin-top: 1rem;">Стратегия 2030: 40% выручки из неатомных секторов</div>
+                <div class="img-attribution" style="margin-top: 1rem;">© Росатом / пресс-служба</div>
+            </div>
+        </div>
+
+        <!-- Слайд 2: Водородный кластер -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>💧</span> Водородная энергетика</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://storage.yandexcloud.net/lpm-rosatom-media-prod/media/images/2022-10/water-h2-sakhalin.2e16d0ba.fill-500x300.jpg" alt="Сахалин водородный завод" onerror="this.src='https://placehold.co/600x400/e2f4ea/2c6e4b?text=Водородный+полигон'">
+                        <div class="card-title" style="font-weight: 700;">Экспортный завод (Сахалин)</div>
+                        <div><span class="stat-number">~100 тыс. тонн/год</span> <span class="badge">статус: заморожен</span></div>
+                        <div>Инвестиции (оценка) > 50 млрд руб.</div>
+                        <div>Партнеры: КАМАЗ, Корпорация развития ДВ</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://avatars.mds.yandex.net/get-verba/1540738/2a0000018bcebc4bfb4be7b06d7b2f0c1e8b/optimize" alt="водородный транспорт" onerror="this.src='https://placehold.co/600x400/c3e3d2/1e6e48?text=Водородный+полигон'">
+                        <div class="card-title">Водородный полигон</div>
+                        <div>Тестовая площадка (МФТИ, МГТУ)</div>
+                        <div>Отработка технологий электролиза, хранения</div>
+                    </div>
+                </div>
+                <div class="future-note">📌 Перспективы: возобновление экспорта в АТР после снятия логистических барьеров, внутреннее потребление.</div>
+                <div class="img-attribution">Фото: Росатом / Пресс-служба</div>
+            </div>
+        </div>
+
+        <!-- Слайд 3: Ветроэнергетика + реальные фото ВЭС -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🌬️</span> Ветроэнергетика (НоваВинд)</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://rosatom-career.ru/upload/iblock/673/673d1fa0650b79e523e65b928cf254f2.jpg" alt="Новолакская ВЭС" onerror="this.src='https://placehold.co/600x400/bde0ce/236b46?text=ВЭС+Дагестан'">
+                        <div class="card-title">Новолакская ВЭС (300 МВт)</div>
+                        <div>💰 17,5 млрд руб. (с Роснано)</div>
+                        <div>Ввод II кв. 2026, крупнейшая на Кавказе</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://minvr.gov.ru/upload/iblock/f6f/f6fe877b86a5c4a7e9c9b0e9d43bcf0c.jpg" alt="ВЭС Киргизия" onerror="this.src='https://placehold.co/600x400/d2efdf/2c7a52?text=Киргизский+проект'">
+                        <div class="card-title">Киргизия 100 МВт</div>
+                        <div>Правительство КР, строительство 2025–2026</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://storage.yandexcloud.net/lpm-rosatom-media-prod/media/images/2024-03/vetropark-amur.jpg" alt="Дальний Восток" onerror="this.src='https://placehold.co/600x400/a8dbbc/1f6743?text=ДФО+519+МВт'">
+                        <div class="card-title">Дальний Восток</div>
+                        <div>6 ВЭС, 519,7 МВт к 2028, партнер Чукотка</div>
+                    </div>
+                </div>
+                <div class="future-note">🎯 К 2030: 1.7 ГВт установленной мощности, сервисный центр.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 4: Композиты + реальное фото производства -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🧬</span> Композитные материалы</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://rusatom-composites.ru/upload/iblock/120/120e2ac1c1f87e03e2f9a1b02d6447b2.jpg" alt="Центр композитов Рузаевка" onerror="this.src='https://placehold.co/600x400/ccecdb/1d6a44?text=Рузаевка+3.9+тыс+тонн'">
+                        <div class="card-title">Рузаевка (Мордовия)</div>
+                        <div>Инвестиции > 1 млрд руб., мощность 3,9 тыс. тонн/год</div>
+                        <div>Продукция для мостов, ТЭК, ЖКХ</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://cdn.iz.ru/sites/default/files/styles/1920x1080/public/article-2023-10/RIAN_6338552.HR_.jpg" alt="Композитные лопасти" onerror="this.src='https://placehold.co/600x400/c0e2cf/216d46?text=Ульяновск+лопасти'">
+                        <div class="card-title">Ульяновск + Титановая долина</div>
+                        <div>Завод композитных лопастей (>2 млрд руб.)</div>
+                        <div>Углеволокно (Свердловская обл.)</div>
+                    </div>
+                </div>
+                <div class="future-note">🔮 Лидерство на рынке полимерных композитов РФ, экспорт в СНГ.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 5: Аддитивные технологии -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🖨️</span> Аддитивные технологии (3D-печать)</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://cdn.atomic-energy.ru/images/articles/2022/12/13/140332-96c8e13b2abaf49b11067bccb682a410.jpg" alt="3D-принтер RusMelt" onerror="this.src='https://placehold.co/600x400/daf1e3/2b754c?text=Центр+в+Минске'">
+                        <div class="card-title">СП в Минске (Беларусь)</div>
+                        <div>Совместно с Н-Холдингом, оборудование RusMelt</div>
+                        <div>Заказчики: МАЗ, НАМИ</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://rusatom-additive.ru/upload/iblock/258/258cbfe15760dd4f29215c1f2592ab35.jpg" alt="Томск Фабметалл" onerror="this.src='https://placehold.co/600x400/ccedd9/1f7548?text=Томск+электронно-лучевая'">
+                        <div class="card-title">Томск: СП «Фабметалл»</div>
+                        <div>Печать для космоса и атомной отрасли</div>
+                    </div>
+                </div>
+                <div class="future-note">🌍 Экспорт аддитивных систем в страны СНГ, снижение импортозависимости.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 6: Накопление энергии (гигафабрика) -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🔋</span> Накопление энергии (Рэнера)</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://rosatom.ru/upload/iblock/2f9/2f97db52b0453bd0e55be70f0859aeb3.jpg" alt="Гигафабрика Неман" onerror="this.src='https://placehold.co/600x400/c7e7d5/236b47?text=Гигафабрика+4+ГВт·ч'">
+                        <div class="card-title">Неман (Калининград)</div>
+                        <div>51 млрд руб. инвестиций, 4 ГВт·ч/год</div>
+                        <div>Запуск серийно: лето 2026</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://cdn.kamaz.ru/upload/iblock/a39/a3951e22b1d44d7e0d21c7fc95f6f12b.jpg" alt="КАМАЗ электробус" onerror="this.src='https://placehold.co/600x400/d6f0e2/258a58?text=КАМАЗ+Мосгортранс'">
+                        <div class="card-title">Партнеры: КАМАЗ, Мосгортранс</div>
+                        <div>Поставки батарей для электробусов, «Москвич»</div>
+                    </div>
+                </div>
+                <div class="future-note">🏭 Экспортный потенциал: Египет, Турция, ЮВА. Вторая гигафабрика к 2030.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 7: Ядерная медицина -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🩺</span> Ядерная медицина</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://rosatom.ru/upload/iblock/6cc/6cc3d01e59f7ac472addfaf77a887cda.jpg" alt="Циклотрон Р-Атом" onerror="this.src='https://placehold.co/600x400/e3f5ea/1f7b4d?text=Комплекс+RPET'">
+                        <div class="card-title">СП «Р-Атом» (ОЭЗ Дубна)</div>
+                        <div>Инвестиции 500 млн руб., циклотроны ПЭТ/КТ</div>
+                        <div>План: ≥15 комплексов до 2032</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://www.nrcki.ru/upload/medialibrary/17e/17e1d3c8d9b4d85fcfbf33cfc2dc64c8.jpg" alt="радиофармпрепараты" onerror="this.src='https://placehold.co/600x400/bde3cf/277a4c?text=Радиофарма+терапия'">
+                        <div class="card-title">Радиофармпрепараты</div>
+                        <div>Диагностика и терапия онкозаболеваний</div>
+                    </div>
+                </div>
+                <div class="future-note">🎯 20% рынка ядерной медицины РФ, экспорт в страны БРИКС.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 8: Цифровые технологии Умный город -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🏙️</span> Цифровые технологии / Умный город</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://rosatom.ru/upload/iblock/995/995bd947316e37c7cd06d99274195120.jpg" alt="Умный город Курчатов" onerror="this.src='https://placehold.co/600x400/caeadb/2c724b?text=Платформа+rosatom.city'">
+                        <div class="card-title">Города-спутники АЭС</div>
+                        <div>Охват >1 млн жителей, бюджет на город 1–2,5 млрд руб.</div>
+                        <div>Сбер, Газпромбанк — партнеры</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://cdn.cnews.ru/img/images/2023/02/20/km_66.jpg" alt="Цифровой двойник" onerror="this.src='https://placehold.co/600x400/cae0d2/2c784f?text=ИИ+в+ЖКХ'">
+                        <div class="card-title">Цифровые двойники сетей</div>
+                        <div>Внедрение в Обнинске и др.</div>
+                    </div>
+                </div>
+                <div class="future-note">📈 Масштабирование в города-миллионники, экспорт платформы.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 9: Экология и экотехнопарки -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>♻️</span> Экология: 7 экотехнопарков</div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <img class="card-img" src="https://storage.yandexcloud.net/lpm-rosatom-media-prod/media/images/2025-12/ecopark-tomsk.jpg" alt="Экотехнопарк Томск" onerror="this.src='https://placehold.co/600x400/d5ecdf/266e48?text=Томский+экотехнопарк'">
+                        <div class="card-title">3-й экотехнопарк (Томск)</div>
+                        <div>Бюджетные инвестиции 17,7 млрд руб. на 2 объекта</div>
+                        <div>Переработка отходов I–II классов</div>
+                    </div>
+                    <div class="info-card">
+                        <img class="card-img" src="https://www.rosatom.ru/upload/iblock/b78/b7821c72f1c73a7e7b2d9e2ae20659e4.jpg" alt="ФГИС ОПВК" onerror="this.src='https://placehold.co/600x400/b1dec7/1c6a40?text=ФГИС+ОПВК'">
+                        <div class="card-title">ФГИС ОПВК</div>
+                        <div>Цифровой учёт опасных отходов по всей РФ</div>
+                    </div>
+                </div>
+                <div class="future-note">🌱 К 2030 замкнутая система переработки промотходов.</div>
+            </div>
+        </div>
+
+        <!-- Слайд 10: Итоги, выводы, будущие направления -->
+        <div class="slide">
+            <div class="container">
+                <div class="slide-title"><span>🚀</span> Итоги и перспективы</div>
+                <div class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px,1fr));">
+                    <div class="info-card"><strong>🎯 2030</strong><br>40% выручки из новых бизнесов (ВИЭ, композиты, накопление)</div>
+                    <div class="info-card"><strong>🧬 Биоэкономика</strong><br>Радиофарма, биосенсоры</div>
+                    <div class="info-card"><strong>⚛️ Термоядерный реактор</strong><br>Проект ТОКАМАК (научный задел)</div>
+                    <div class="info-card"><strong>🧠 Квантовые технологии</strong><br>Квантовые вычисления и связь</div>
+                </div>
+                <div class="future-note" style="margin-top: 1rem;">
+                    💡 <strong>Выводы:</strong> Несмотря на сложности в водородном экспорте, Росатом создаёт технологический суверенитет в ветроэнергетике, системах накопления, композитах и цифре. Перспективные рынки — Азия, Африка, Латинская Америка. Ядерная медицина и экология станут драйверами следующего десятилетия.
+                </div>
+                <footer>Актуально на апрель 2026 • Данные стратегии Росатома, инвестиционные проекты дивизионов</footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки навигации -->
+    <button class="nav-btn nav-left" id="prevBtn">←</button>
+    <button class="nav-btn nav-right" id="nextBtn">→</button>
+    <div class="dots" id="dotsContainer"></div>
+</div>
+
+<script>
+    const wrapper = document.getElementById('slideWrapper');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    function updateSlider() {
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        updateDots();
+    }
+
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            currentIndex++;
+            updateSlider();
+        }
+    }
+
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    }
+
+    // динамические точки
+    const dotsContainer = document.getElementById('dotsContainer');
+    function updateDots() {
+        dotsContainer.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (i === currentIndex) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateSlider();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    // клавиши
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+            e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+            e.preventDefault();
+        }
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+
+    // Инициализация точек и обработка touch (дополнительно для мобильных)
+    updateDots();
+
+    // небольшая корректировка высоты при смене слайда для мобильных (чтобы скролл внутри работал корректно)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateSlider();
+        }, 100);
+    });
+</script>
+</body>
+</html>
